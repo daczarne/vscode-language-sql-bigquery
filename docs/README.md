@@ -9,14 +9,6 @@ In this document I add some notes regarding this issue.
 
 There are two remaining issues which I explain below.
 
-### Expressions with no backticks
-
-Firstly, the current solution works when the targeted table is surrounded by backticks (`table_name`). The problem is
-that when the targeted table is the result of a previous CTE, backticks are not allowed. The following image shows this
-problem:
-
-![backticks versus no backticks](img/01_issue_one.png)
-
 ### FROM UNNEST issue
 
 The second issue is that we don't always find a table name after the `FROM` keyword. In the structure `FROM UNNEST(...)`
@@ -35,6 +27,19 @@ there's no other reason why the line should be broken.
 
 ![broken line](img/04_broken_line.png)
 
-This issue is resolved in [4][1].
+Even though I've chosen to call this the `FROM UNNEST(...)` issue, this also happens with `JOIN UNNEST(...)`
+expressions.
+
+---
+This issue is resolved in [4][1] and [5][2].
+
+### Expressions with no backticks
+
+Firstly, the current solution works when the targeted table is surrounded by backticks (`table_name`). The problem is
+that when the targeted table is the result of a previous CTE, backticks are not allowed. The following image shows this
+problem:
+
+![backticks versus no backticks](img/01_issue_one.png)
 
 [1]: https://github.com/daczarne/vscode-language-sql-bigquery/pull/4
+[2]: https://github.com/daczarne/vscode-language-sql-bigquery/pull/5
