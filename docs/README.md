@@ -40,5 +40,122 @@ problem:
 
 ![backticks versus no backticks](img/01_issue_one.png)
 
+## Current regex
+
+Because the second issue is much harder to resolve, let's start by understanding how all of this works.
+
+In order to build a syntax highlighter for VS Code one needs to "simply" provide the `syntaxes` configuration. In it,
+one provides patterns to be matched. These patterns need to have capture groups. To each capture group a classification
+(`name`) gets assigned. The rest (i.e. applying color to different words and tokens in the code) is not handled by this
+extension, but by the VS Code engine.
+
+The pattern in question here is the following one (it includes the solution to problem one):
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "SQL (BigQuery)",
+  "patterns": [
+    {
+      "captures": {
+        "1": {
+          "name": "keyword.other.select.sql"
+        },
+        "4": {
+          "name": "entity.name.function.table.standard.sql"
+        },
+        "5": {
+          "name": "invalid.illegal.table.delimiter.sql"
+        },
+        "6": {
+          "name": "variable.parameter.table.partition_decorator.sql"
+        },
+        "7": {
+          "name": "entity.name.function.table.legacy.sql"
+        },
+        "8": {
+          "name": "invalid.illegal.table.delimiter.sql"
+        },
+        "9": {
+          "name": "variable.parameter.table.partition_decorator.legacy.sql"
+        }
+      },
+      "match": "(?i)(from(?!\\s+unnest)|join(?!\\s+unnest)|delete\\s+from|delete(?!\\s+from)|update|using)\\s+((`?)((?:[\\w\\-\\{\\}]+(?:\\.|(\\:)))?(?:[\\w\\{\\}]+\\.)?(?:INFORMATION_SCHEMA\\.\\w+|[\\w\\{\\}\\.\\(\\=\\\"\\'\\-\\,\\s\\)]+))(\\*|\\$\\w+)?\\3?|\\[((?:[\\w\\-\\{\\}]+(?:\\:|(\\.)))?(?:[\\w\\{\\}]+\\.)?[\\w\\{\\}]+)(\\*|\\$\\w+)?\\])",
+      "name": "meta.create.from.sql"
+    }
+  ],
+  "repository": {},
+  "scopeName": "source.sql-bigquery"
+}
+```
+
+We can see that this pattern will generate (at least) 9 capturing-groups, 7 of which will be assigned to categories.
+The 9 capturing groups are:
+
+| Group | Expression                                                                                    |
+|:-----:|-----------------------------------------------------------------------------------------------|
+| 1     | `(from(?!\\s+unnest)\|join(?!\\s+unnest)\|delete\\s+from\|delete(?!\\s+from)\|update\|using)` |
+| 2     | group that contains 3, 4, 5, 6, 7, 8, and 9 as sub-groups                                     |
+| 3     | ``(`?)``                                                                                      |
+| 4     | group that contains group 5 as a sub-group, plus more regex expressions                       |
+| 5     | `(\\:)`                                                                                       |
+| 6     | `(\\*\|\\$\\w+)?`                                                                             |
+| 7     | group that contains group 8 as a sub-group, plus more regex expressions                       |
+| 8     | `(\\.)`                                                                                       |
+| 9     | `(\\*\|\\$\\w+)?`                                                                             |
+
+```txt
+(?i)
+( <!-- start of group 1 -->
+  from(?!\\s+unnest)|join(?!\\s+unnest)|delete\\s+from|delete(?!\\s+from)|update|using
+) <!-- end of group 1 -->
+\\s+
+( <!-- start of group 2 -->
+  (`?) <!-- group 3 -->
+  ( <!-- start of group 4 -->
+    (?:
+      [\\w\\-\\{\\}]+
+      (?:
+        \\.
+        |
+        (\\:) <!-- group 5 -->
+      )
+    )?
+    (?:
+      [\\w\\{\\}]+\\.
+    )?
+    (?:
+      INFORMATION_SCHEMA\\.\\w+
+      |
+      [\\w\\{\\}\\.\\(\\=\\\"\\'\\-\\,\\s\\)]+
+    )
+  ) <!-- end of group 4 -->
+  (\\*|\\$\\w+)? <!-- group 6 -->
+  \\3?
+  |
+  \\[
+    ( <!-- start of group 7 -->
+      (?:
+        [\\w\\-\\{\\}]+
+        (?:
+          \\:
+          |
+          (\\.) <!-- group 8 -->
+        )
+      )?
+      (?:[\\w\\{\\}]+\\.)?
+      [\\w\\{\\}]+
+    ) <!-- end of group 7 -->
+    s(\\*|\\$\\w+)? <!-- group 9 -->
+  \\]
+) <!-- end of group 2 -->
+```
+
+From the above we see that the solution needs to be included after (or as a greediness stop to) the capturing group 4.
+
+```txt
+((?:[\\w\\-\\{\\}]+(?:\\.|(\\:)))?(?:[\\w\\{\\}]+\\.)?(?:INFORMATION_SCHEMA\\.\\w+|[\\w\\{\\}\\.\\(\\=\\\"\\'\\-\\,\\s\\)]+))
+```
+
 [1]: https://github.com/daczarne/vscode-language-sql-bigquery/pull/4
 [2]: https://github.com/daczarne/vscode-language-sql-bigquery/pull/5
