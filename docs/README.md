@@ -107,48 +107,54 @@ The 9 capturing groups are:
 ```txt
 (?i)
 ( <!-- start of group 1 -->
-    from(?!\\s+unnest)|join(?!\\s+unnest)|delete\\s+from|delete(?!\\s+from)|update|using
+  from(?!\\s+unnest)|join(?!\\s+unnest)|delete\\s+from|delete(?!\\s+from)|update|using
 ) <!-- end of group 1 -->
 \\s+
 ( <!-- start of group 2 -->
-    (`?) <!-- group 3 -->
-    ( <!-- start of group 4 -->
+  (`?) <!-- group 3 -->
+  ( <!-- start of group 4 -->
+    (?:
+      [\\w\\-\\{\\}]+
+      (?:
+        \\.
+        |
+        (\\:) <!-- group 5 -->
+      )
+    )?
+    (?:
+      [\\w\\{\\}]+\\.
+    )?
+    (?:
+      INFORMATION_SCHEMA\\.\\w+
+      |
+      [\\w\\{\\}\\.\\(\\=\\\"\\'\\-\\,\\s\\)]+
+    )
+  ) <!-- end of group 4 -->
+  (\\*|\\$\\w+)? <!-- group 6 -->
+  \\3?
+  |
+  \\[
+    ( <!-- start of group 7 -->
+      (?:
+        [\\w\\-\\{\\}]+
         (?:
-            [\\w\\-\\{\\}]+
-            (?:
-                \\.
-                |
-                (\\:) <!-- group 5 -->
-            )
-        )?
-        (?:
-            [\\w\\{\\}]+\\.
-        )?
-        (?:
-            INFORMATION_SCHEMA\\.\\w+
-            |
-            [\\w\\{\\}\\.\\(\\=\\\"\\'\\-\\,\\s\\)]+
+          \\:
+          |
+          (\\.) <!-- group 8 -->
         )
-    ) <!-- end of group 4 -->
-    (\\*|\\$\\w+)? <!-- group 6 -->
-    \\3?
-    |
-    \\[
-        ( <!-- start of group 7 -->
-            (?:
-                [\\w\\-\\{\\}]+
-                (?:
-                    \\:
-                    |
-                    (\\.) <!-- group 8 -->
-                )
-            )?
-            (?:[\\w\\{\\}]+\\.)?
-            [\\w\\{\\}]+
-        ) <!-- end of group 7 -->
-        (\\*|\\$\\w+)? <!-- group 9 -->
-    \\]
+      )?
+      (?:[\\w\\{\\}]+\\.)?
+      [\\w\\{\\}]+
+    ) <!-- end of group 7 -->
+    s(\\*|\\$\\w+)? <!-- group 9 -->
+  \\]
 ) <!-- end of group 2 -->
+```
+
+From the above we see that the solution needs to be included after (or as a greediness stop to) the capturing group 4.
+
+```txt
+((?:[\\w\\-\\{\\}]+(?:\\.|(\\:)))?(?:[\\w\\{\\}]+\\.)?(?:INFORMATION_SCHEMA\\.\\w+|[\\w\\{\\}\\.\\(\\=\\\"\\'\\-\\,\\s\\)]+))
 ```
 
 [1]: https://github.com/daczarne/vscode-language-sql-bigquery/pull/4
