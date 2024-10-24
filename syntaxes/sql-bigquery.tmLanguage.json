@@ -83,7 +83,7 @@
           "name": "variable.parameter.table.partition_decorator.legacy.sql"
         }
       },
-      "match": "(?i)(from(?!\\s+unnest)|join|delete\\s+from|delete(?!\\s+from)|update|using)\\s+((`?)((?:[\\w\\-\\{\\}]+(?:\\.|(\\:)))?(?:[\\w\\{\\}]+\\.)?(?:INFORMATION_SCHEMA\\.\\w+|[\\w\\{\\}\\.\\(\\=\\\"\\'\\-\\,\\s\\)]+))(\\*|\\$\\w+)?\\3?|\\[((?:[\\w\\-\\{\\}]+(?:\\:|(\\.)))?(?:[\\w\\{\\}]+\\.)?[\\w\\{\\}]+)(\\*|\\$\\w+)?\\])",
+      "match": "(?i)(from(?!\\s+unnest)|join(?!\\s+unnest)|delete\\s+from|delete(?!\\s+from)|update|using)\\s+((`?)((?:[\\w\\-\\{\\}]+(?:\\.|(\\:)))?(?:[\\w\\{\\}]+\\.)?(?:INFORMATION_SCHEMA\\.\\w+|[\\w\\{\\}\\.\\(\\=\\\"\\'\\-\\,\\s\\)]+))(\\*|\\$\\w+)?\\3?|\\[((?:[\\w\\-\\{\\}]+(?:\\:|(\\.)))?(?:[\\w\\{\\}]+\\.)?[\\w\\{\\}]+)(\\*|\\$\\w+)?\\])",
       "name": "meta.create.from.sql"
     },
     {
