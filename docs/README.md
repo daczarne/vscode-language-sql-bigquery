@@ -1,9 +1,8 @@
 # Matching tables correctly
 
 While aagerblad's solution is an improvement that allows for Jinja parameters to not cause major syntax highlighting
-failures, it is far from perfect, and other issues still remain.
-
-In this document I add some notes regarding this issue.
+failures, it is far from perfect, and other issues still remain. In this document I add some notes regarding these
+issues.
 
 ## Current status
 
