@@ -34,3 +34,7 @@ Breaking the line in which the expression is found would solve this issue. But t
 there's no other reason why the line should be broken.
 
 ![broken line](img/04_broken_line.png)
+
+This issue is resolved in [4][1].
+
+[1]: https://github.com/daczarne/vscode-language-sql-bigquery/pull/4
