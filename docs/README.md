@@ -92,7 +92,7 @@ The pattern in question here is the following one (it includes the solution to p
 We can see that this pattern will generate (at least) 9 capturing-groups, 7 of which will be assigned to categories.
 The 9 capturing groups are:
 
-| Group | Expression (shortened when needed)                                                            |
+| Group | Expression                                                                                    |
 |:-----:|-----------------------------------------------------------------------------------------------|
 | 1     | `(from(?!\\s+unnest)\|join(?!\\s+unnest)\|delete\\s+from\|delete(?!\\s+from)\|update\|using)` |
 | 2     | group that contains 3, 4, 5, 6, 7, 8, and 9 as sub-groups                                     |
