@@ -106,13 +106,13 @@ The 9 capturing groups are:
 
 ```txt
 (?i)
-( <!-- start group 1 -->
+( <!-- start of group 1 -->
     from(?!\\s+unnest)|join(?!\\s+unnest)|delete\\s+from|delete(?!\\s+from)|update|using
-) <!-- end group 1 -->
+) <!-- end of group 1 -->
 \\s+
-( <!-- start group 2 -->
+( <!-- start of group 2 -->
     (`?) <!-- group 3 -->
-    ( <!-- start group 4 -->
+    ( <!-- start of group 4 -->
         (?:
             [\\w\\-\\{\\}]+
             (?:
@@ -129,12 +129,12 @@ The 9 capturing groups are:
             |
             [\\w\\{\\}\\.\\(\\=\\\"\\'\\-\\,\\s\\)]+
         )
-    ) <!-- end group 4 -->
+    ) <!-- end of group 4 -->
     (\\*|\\$\\w+)? <!-- group 6 -->
     \\3?
     |
     \\[
-        ( <!-- start group 7 -->
+        ( <!-- start of group 7 -->
             (?:
                 [\\w\\-\\{\\}]+
                 (?:
@@ -145,10 +145,10 @@ The 9 capturing groups are:
             )?
             (?:[\\w\\{\\}]+\\.)?
             [\\w\\{\\}]+
-        ) <!-- end group 7 -->
+        ) <!-- end of group 7 -->
         (\\*|\\$\\w+)? <!-- group 9 -->
     \\]
-) <!-- end group 2 -->
+) <!-- end of group 2 -->
 ```
 
 [1]: https://github.com/daczarne/vscode-language-sql-bigquery/pull/4
