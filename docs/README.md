@@ -7,7 +7,7 @@ In this document I add some notes regarding this issue.
 
 ## Current status
 
-There are two remaining issues which I explain below.
+There are two remaining issues, which I explain below.
 
 ### FROM UNNEST issue
 
